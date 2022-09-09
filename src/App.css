@@ -179,14 +179,13 @@ label svg{
 }
 
 #display {
-  height: 2em;
-  line-height: 2em;
-  padding: 0 0.5rem;
+  height: 2.5em;
+  line-height: 2.5em;
   text-align: center;
   border-radius: 5px;
   color: #2b6777;
-  font-size: 1.2em;
-  background-color: rgba(255, 255, 255, 0.903);
+  font-size: 1.1em;
+  background-color: #00fbff;
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
   width: 7rem;
 
