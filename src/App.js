@@ -3,6 +3,17 @@ import './App.css';
 import React from 'react';
 import { TiPlus, TiMinus} from 'react-icons/ti';
 
+const audio_list = [
+  {key: 'Q', title: "Heater-1", url: "https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3"},
+  {key: 'W', title: "Heater-2", url: "https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3"},
+  {key: 'E', title: "Heater-3", url: "https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3"},
+  {key: 'A', title: "Heater-4", url: "https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3"},
+  {key: 'S', title: "Clap", url:"https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3"},
+  {key: 'D', title: "Open-HH", url:"https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3"},
+  {key: 'Z', title: "Kick-n'-Hat", url: "https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3"},
+  {key: 'X', title: "Kick", url: "https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3"},
+  {key: 'C', title: "Closed-HH", url: "https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3"}
+]
 
 class App extends React.Component {
   constructor(props) {
@@ -123,6 +134,7 @@ class App extends React.Component {
       </div>
 
       <div id="pad-body">
+
         <div className="left-panel">
           <div id="display">Welcome</div>
           <div className="power-container">
@@ -141,21 +153,13 @@ class App extends React.Component {
             <button onClick={this.handleVolumeUp} disabled={!this.state.power} id="volup" className="volume"><TiPlus /></button>
             <button onClick={this.handleVolumeDown} disabled={!this.state.power} id="voldown" className="volume"><TiMinus /></button>
           </div>
+        </div>
 
-        </div>
-      
-      
         <div className="right-panel">
-          <button onClick={this.handleClick} disabled={!this.state.power} name="Q" className="drum-pad" id="Heater-1"><audio className="clip" id="Q"><source src="https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3" type="audio/mp3" /></audio>Q</button>
-          <button onClick={this.handleClick} disabled={!this.state.power} name="W" className="drum-pad" id="Heater-2"><audio className="clip" id="W"><source src="https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3" type="audio/mp3" /></audio>W</button>
-          <button onClick={this.handleClick} disabled={!this.state.power} name="E" className="drum-pad" id="Heater-3"><audio className="clip" id="E"><source src="https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3" type="audio/mp3" /></audio>E</button>
-          <button onClick={this.handleClick} disabled={!this.state.power} name="A" className="drum-pad" id="Heater-4"><audio className="clip" id="A"><source src="https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3" type="audio/mp3" /></audio>A</button>
-          <button onClick={this.handleClick} disabled={!this.state.power} name="S" className="drum-pad" id="Clap"><audio className="clip" id="S"><source src="https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3" type="audio/mp3" /></audio>S</button>
-          <button onClick={this.handleClick} disabled={!this.state.power} name="D" className="drum-pad" id="Open-HH"><audio className="clip" id="D"><source src="https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3"type="audio/mp3" /></audio>D</button>
-          <button onClick={this.handleClick} disabled={!this.state.power} name="Z" className="drum-pad" id="Kick-n'-Hat"><audio className="clip" id="Z"><source src="https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3" type="audio/mp3" /></audio>Z</button>
-          <button onClick={this.handleClick} disabled={!this.state.power} name="X" className="drum-pad" id="Kick"><audio className="clip" id="X"><source src="https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3" type="audio/mp3" /></audio>X</button>
-          <button onClick={this.handleClick} disabled={!this.state.power} name="C" className="drum-pad" id="Closed-HH"><audio className="clip" id="C"><source src="https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3" type="audio/mp3" /></audio>C</button>
+        {audio_list.map(audio => <button onClick={this.handleClick} disabled={!this.state.power} name={audio.key} className="drum-pad" 
+          id={audio.title}><audio className="clip" id={audio.key}><source src={audio.url} type="audio/mp3" /></audio>{audio.key}</button>)}
         </div>
+        
       </div>
     </div>
     );
