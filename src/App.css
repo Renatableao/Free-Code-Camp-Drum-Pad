@@ -253,3 +253,10 @@ label svg{
   transform: scale(1.2);
   color: #00fbff;
 }
+
+@media screen and (max-width: 600px) {
+  html {
+    font-size: 10px;
+  }
+};
+  
