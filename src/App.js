@@ -1,7 +1,8 @@
 
 import './App.css';
 import React from 'react';
-import { TiPlus, TiMinus} from 'react-icons/ti';
+import { TiPlus, TiMinus } from 'react-icons/ti'
+
 
 const audio_list = [
   {key: 'Q', title: "Heater-1", url: "https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3"},
@@ -32,6 +33,7 @@ class App extends React.Component {
     this.handlePower = this.handlePower.bind(this)
     this.handleVolumeUp = this.handleVolumeUp.bind(this)
     this.handleVolumeDown = this.handleVolumeDown.bind(this)
+    this.setDisplay = this.setDisplay.bind(this)
     
   }
 
@@ -46,25 +48,24 @@ class App extends React.Component {
     })
   }
   
-  handleKey() {
-    window.addEventListener("keydown", (event) => {
-      event.preventDefault()
-      let upkey = (event.key).toUpperCase();
-      if ((['Q', 'W', 'E', 'A', 'S', 'D', 'Z', 'X', 'C']).includes(upkey)) {
-        this.setState({
-        key: upkey
-        }, () => {
+  handleKey(event) {
+    let upperkey = (event.key).toUpperCase();
+    if ((['Q', 'W', 'E', 'A', 'S', 'D', 'Z', 'X', 'C']).includes(upperkey)) {
+      this.setState({
+      key: upperkey
+      }, () => {
         if (this.state.power) {
-        this.playSound(this.state.key, this.state.vol)
-        this.clickButton(this.state.key)
-        this.setDisplay(this.state.key)
+          this.playSound(this.state.key, this.state.vol)
+          this.clickButton(this.state.key)
+          this.setDisplay(this.state.key)
         }
-      })}
-    })}
+      })
+    }
+  }
 
   playSound(thisstate, volstate) {
     const sound = document.getElementById(thisstate);
-    sound.currentTime=0;
+    sound.currentTime= 0;
     sound.volume = volstate
     sound.play()
   }
@@ -121,8 +122,12 @@ class App extends React.Component {
   }}} 
   
   componentDidMount() {
-    this.handleKey()
+    document.addEventListener('keydown', this.handleKey);
     document.getElementById("power").checked = "true"
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKey);
   }
 
   render() {
@@ -156,10 +161,10 @@ class App extends React.Component {
         </div>
 
         <div className="right-panel">
-        {audio_list.map(audio => <button onClick={this.handleClick} disabled={!this.state.power} name={audio.key} className="drum-pad" 
-          id={audio.title}><audio className="clip" id={audio.key}><source src={audio.url} type="audio/mp3" /></audio>{audio.key}</button>)}
+        {audio_list.map(audio => <button onClick={this.handleClick} key={audio.title} disabled={!this.state.power} name={audio.key} className="drum-pad" 
+          id={audio.title}><audio className="clip" id={audio.key} src={audio.url} type="audio/mp3"></audio>{audio.key}</button>)}
         </div>
-        
+
       </div>
     </div>
     );
@@ -167,3 +172,4 @@ class App extends React.Component {
 }
 
 export default App;
+
