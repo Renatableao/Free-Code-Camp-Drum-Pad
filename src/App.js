@@ -16,70 +16,88 @@ const audio_list = [
   {key: 'C', title: "Closed-HH", url: "https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3"}
 ]
 
-class App extends React.Component {
+
+class DrumPad extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      clicked: "",
-      key: "",
-      power: "true",
-      vol: 0.5
-    }
-
+    
     this.handleClick = this.handleClick.bind(this)
     this.handleKey = this.handleKey.bind(this)
     this.playSound = this.playSound.bind(this)
     this.clickButton = this.clickButton.bind(this)
-    this.handlePower = this.handlePower.bind(this)
-    this.handleVolumeUp = this.handleVolumeUp.bind(this)
-    this.handleVolumeDown = this.handleVolumeDown.bind(this)
     this.setDisplay = this.setDisplay.bind(this)
-    
+}
+
+handleClick() {
+    this.playSound(this.props.drumKey, this.props.vol)
+    this.clickButton(this.props.drumKey)
+    this.setDisplay(this.props.drumKey)
   }
 
-  handleClick(event) {
-    event.preventDefault()
-    this.setState({
-      clicked: event.target.textContent
-    }, () => {
-      this.playSound(this.state.clicked, this.state.vol)
-      this.clickButton(this.state.clicked)
-      this.setDisplay(this.state.clicked)
-    })
-  }
-  
-  handleKey(event) {
-    let upperkey = (event.key).toUpperCase();
-    if ((['Q', 'W', 'E', 'A', 'S', 'D', 'Z', 'X', 'C']).includes(upperkey)) {
-      this.setState({
-      key: upperkey
-      }, () => {
-        if (this.state.power) {
-          this.playSound(this.state.key, this.state.vol)
-          this.clickButton(this.state.key)
-          this.setDisplay(this.state.key)
-        }
-      })
+
+handleKey(event) {
+  let upperkey = (event.key).toUpperCase();
+  if (upperkey === this.props.drumKey) {
+      if (this.props.power) {
+        this.playSound(this.props.drumKey, this.props.vol)
+        this.clickButton(this.props.drumKey)
+        this.setDisplay(this.props.drumKey)
+      }
     }
   }
 
-  playSound(thisstate, volstate) {
-    const sound = document.getElementById(thisstate);
-    sound.currentTime= 0;
-    sound.volume = volstate
-    sound.play()
+playSound(thisstate, volstate) {
+  const sound = document.getElementById(thisstate);
+  sound.currentTime= 0;
+  sound.volume = volstate
+  sound.play()
+}
+
+clickButton(thisstate) {
+  const button = document.getElementsByName(thisstate);
+  button[0].classList.add('active')
+  setTimeout(() => button[0].classList.remove('active'), 150)
+}
+
+setDisplay(thisstate) {
+  const display = document.getElementById('display')
+  display.innerHTML = document.getElementsByName(thisstate)[0].id
+}
+
+componentDidMount() {
+  document.getElementById("power").checked = "true"
+  document.addEventListener('keydown', this.handleKey);
+  
+}
+
+componentWillUnmount() {
+  document.removeEventListener('keydown', this.handleKey);
+}
+
+render() {
+  return (
+    <button onClick={this.handleClick} key={this.props.title} disabled={!this.props.power} name={this.props.drumKey} className="drum-pad" 
+          id={this.props.title}>{this.props.drumKey}<audio className="clip" id={this.props.drumKey} src={this.props.url} type="audio/mp3"></audio></button>)
+}}
+
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      power: "true",
+      vol: 0.5
+    }
+
+    
+    this.handlePower = this.handlePower.bind(this)
+    this.handleVolumeUp = this.handleVolumeUp.bind(this)
+    this.handleVolumeDown = this.handleVolumeDown.bind(this)
+    
+    
   }
 
-  clickButton(thisstate) {
-    const button = document.getElementsByName(thisstate);
-    button[0].classList.add('active')
-    setTimeout(() => button[0].classList.remove('active'), 150)
-  }
-
-  setDisplay(thisstate) {
-    const display = document.getElementById('display')
-    display.innerHTML = document.getElementsByName(thisstate)[0].id
-  }
+  
 
   handlePower() {
     this.setState(state => ({
@@ -121,15 +139,7 @@ class App extends React.Component {
       })
   }}} 
   
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKey);
-    document.getElementById("power").checked = "true"
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKey);
-  }
-
+ 
   render() {
     return (
 
@@ -161,8 +171,7 @@ class App extends React.Component {
         </div>
 
         <div className="right-panel">
-        {audio_list.map(audio => <button onClick={this.handleClick} key={audio.title} disabled={!this.state.power} name={audio.key} className="drum-pad" 
-          id={audio.title}><audio className="clip" id={audio.key} src={audio.url} type="audio/mp3"></audio>{audio.key}</button>)}
+        {audio_list.map(audio => <DrumPad url={audio.url} title={audio.title} drumKey={audio.key} power={this.state.power} vol={this.state.vol} />)}
         </div>
 
       </div>
